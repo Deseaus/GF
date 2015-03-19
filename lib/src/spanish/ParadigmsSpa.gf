@@ -60,7 +60,10 @@ oper
   genitive   : Prep ; -- preposition "de" and its contractions
   dative     : Prep ; -- preposition "a" and its contractions
 
-  mkPrep : Str -> Prep ; -- other preposition
+  mkPrep : overload {
+    mkPrep : Str -> Prep ; -- other preposition
+    mkPrep : Str -> Prep -> Prep ; -- compound prepositions, e.g. "antes de", made as mkPrep "antes" genitive
+  } ;
 
 
 --2 Nouns
@@ -220,7 +223,11 @@ oper
 
 -- To form reflexive verbs:
 
-  reflV : V -> V ; -- reflexive verb
+    reflV : V -> V ; -- reflexive verb
+--  reflV : overload {
+--     reflV : V -> V ; -- reflexive verb
+--     reflV : Str -> V ;
+--    } ;
 
 -- Verbs with a deviant passive participle: just give the participle
 -- in masculine singular form as second argument.
@@ -318,7 +325,10 @@ oper
   accusative = complAcc ** {lock_Prep = <>} ;
   genitive = complGen ** {lock_Prep = <>} ;
   dative = complDat ** {lock_Prep = <>} ;
-  mkPrep p = {s = p ; c = Acc ; isDir = False ; lock_Prep = <>} ;
+  mkPrep = overload {
+    mkPrep : Str -> Prep = \p -> {s = p ; c = Acc ; isDir = False ; lock_Prep = <>} ;
+    mkPrep : Str -> Prep -> Prep = \p,c -> {s = p ; c = c.c ; isDir = False ; lock_Prep = <>}
+  } ;
 
 
   mk2N x y g = mkNounIrreg x y g ** {lock_N = <>} ;
@@ -388,6 +398,10 @@ oper
     in verbBesch verb ** {vtyp = VHabere ; p = [] ; lock_V = <>} ;
 
   reflV v = v ** {vtyp = VRefl} ;
+--  reflV = overload {
+--   reflV : V -> V = \v ->  v ** {vtyp = VRefl} ;
+--   reflV : Str -> V = \s -> mkV s ** {vtyp = VRefl} ;
+--   } ;
 
   verboV ve = verbBesch ve ** {vtyp = VHabere ; p = [] ; lock_V = <>} ;
 
