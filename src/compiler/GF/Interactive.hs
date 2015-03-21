@@ -345,7 +345,7 @@ fetchCommand gfenv = do
           Haskeline.historyFile = Just path,
           Haskeline.autoAddHistory = True
         }
-  res <- IO.runInterruptibly $ Haskeline.runInputT settings (Haskeline.getInputLine (prompt (commandenv gfenv)))
+  res <- IO.runInterruptibly $ Haskeline.runInputT settings (Haskeline.getInputLine (prompt gfenv))
   case res of
     Left  _        -> return ""
     Right Nothing  -> return "q"
@@ -354,16 +354,23 @@ fetchCommand gfenv = do
 importInEnv :: GFEnv -> Options -> [FilePath] -> SIO GFEnv
 importInEnv gfenv opts files
     | flag optRetainResource opts =
-        do src <- importSource (grammar gfenv) opts files
-           return $ gfenv {grammar = src}
+        do src <- importSource opts files
+           pgf <- lazySIO importPGF -- duplicates some work, better to link src
+           return $ gfenv {grammar = src, retain=True,
+                           commandenv = mkCommandEnv pgf}
     | otherwise =
-        do let opts' = addOptions (setOptimization OptCSE False) opts
-               pgf0 = multigrammar (commandenv gfenv)
-           pgf1 <- importGrammar pgf0 opts' files
-           if (verbAtLeast opts Normal)
-             then putStrLnFlush $ unwords $ "\nLanguages:" : map showCId (languages pgf1)
-             else done
+        do pgf1 <- importPGF
            return $ gfenv { commandenv = mkCommandEnv pgf1 }
+  where
+    importPGF =
+      do let opts' = addOptions (setOptimization OptCSE False) opts
+             pgf0 = multigrammar (commandenv gfenv)
+         pgf1 <- importGrammar pgf0 opts' files
+         if (verbAtLeast opts Normal)
+           then putStrLnFlush $
+                    unwords $ "\nLanguages:" : map showCId (languages pgf1)
+           else done
+         return pgf1
 
 tryGetLine = do
   res <- try getLine
@@ -390,21 +397,22 @@ welcome = unlines [
   "Bug reports: http://code.google.com/p/grammatical-framework/issues/list"
   ]
 
-prompt env 
-  | abs == wildCId = "> "
+prompt env
+  | retain env || abs == wildCId = "> "
   | otherwise      = showCId abs ++ "> "
   where
-    abs = abstractName (multigrammar env)
+    abs = abstractName (multigrammar (commandenv env))
 
 data GFEnv = GFEnv {
   grammar :: Grammar, -- gfo grammar -retain
+  retain :: Bool,  -- grammar was imported with -retain flag
   commandenv :: CommandEnv,
   history    :: [String]
   }
 
 emptyGFEnv :: GFEnv
 emptyGFEnv =
-  GFEnv emptyGrammar (mkCommandEnv emptyPGF) [] {-0-}
+  GFEnv emptyGrammar False (mkCommandEnv emptyPGF) [] {-0-}
 
 wordCompletion gfenv (left,right) = do
   case wc_type (reverse left) of

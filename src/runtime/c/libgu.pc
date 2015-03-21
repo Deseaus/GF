@@ -1,0 +1,10 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libgu
+Description: G(F|lib|othenburg) Utilities library
+Version: 0.1.pre
+Libs: -L${libdir} -lgu 
+Cflags: -I${includedir} -I${libdir}/libgu/include

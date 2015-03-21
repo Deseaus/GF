@@ -1,0 +1,11 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libpgf
+Description: Portable Grammar Format library
+Requires: libgu
+Version: 0.1.pre
+Libs: -L${libdir} -lpgf
+Cflags: -I${includedir}

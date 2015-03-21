@@ -325,11 +325,11 @@ oper
   accusative = complAcc ** {lock_Prep = <>} ;
   genitive = complGen ** {lock_Prep = <>} ;
   dative = complDat ** {lock_Prep = <>} ;
+
   mkPrep = overload {
     mkPrep : Str -> Prep = \p -> {s = p ; c = Acc ; isDir = False ; lock_Prep = <>} ;
     mkPrep : Str -> Prep -> Prep = \p,c -> {s = p ; c = c.c ; isDir = False ; lock_Prep = <>}
   } ;
-
 
   mk2N x y g = mkNounIrreg x y g ** {lock_N = <>} ;
   regN x = mkNomReg x ** {lock_N = <>} ;

@@ -53,6 +53,9 @@ flag interrupt
 flag server
   Description: Include --server mode
   Default:     True
+flag network-uri
+   description: Get Network.URI from the network-uri package
+   default: True
 
 --flag new-comp
 --  Description: Make -new-comp the default
@@ -76,7 +79,8 @@ Library
                  utf8-string,
                  random,
                  pretty,
-                 mtl
+                 mtl,
+                 exceptions
   hs-source-dirs: src/runtime/haskell
 
   if flag(custom-binary)
@@ -213,7 +217,6 @@ Library
     GF.Grammar.Lexer
     GF.Grammar.Lockfield
     GF.Grammar.Lookup
-    GF.Grammar.MMacros
     GF.Grammar.Macros
     GF.Grammar.Parser
     GF.Grammar.PatternMatch
@@ -262,11 +265,12 @@ Library
     cpp-options: -DC_RUNTIME
 
   if flag(server)
-    build-depends: httpd-shed>=0.4.0.2, network>=2.3 && <2.6, json
-    if impl(ghc>=7.8)
-      build-depends: cgi>=3001.2.2.0
+    build-depends: httpd-shed>=0.4.0.3, network>=2.3 && <2.7, json,
+                   cgi>=3001.2.2.0
+    if flag(network-uri)
+      build-depends: network-uri>=2.6, network>=2.6
     else
-      build-depends: cgi
+      build-depends: network<2.6
 
     cpp-options: -DSERVER_MODE
     other-modules:
@@ -314,7 +318,7 @@ Executable gf
   ghc-options: -threaded -fwarn-unused-imports
 
   if impl(ghc>=7.0)
-    ghc-options: -rtsopts
+    ghc-options: -rtsopts -with-rtsopts=-I5
     if impl(ghc<7.8)
       ghc-options: -with-rtsopts=-K64M
 

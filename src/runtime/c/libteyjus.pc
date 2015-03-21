@@ -1,0 +1,11 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libteyjus
+Description: The Teyjus runtime system
+Requires:
+Version: 0.1.pre
+Libs: -L${libdir} -lteyjus
+Cflags: -I${includedir}
