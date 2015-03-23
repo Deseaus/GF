@@ -4094,8 +4094,7 @@ lin canon_N = mkN "canone" masculine ; -- status=guess
 lin canonist_N = mkN "canonista" masculine ; -- status=guess
 lin canonize_V2 = mkV2 (mkV "santificare") | mkV2 (mkV "canonizzare") ; -- status=guess, src=wikt status=guess, src=wikt
 lin canopy_N = mkN "baldacchino" ; -- status=guess
-lin cantaloup_N = mkN "cantalupo" | mkN "zatta" ; -- UWN
-lin cantaloupe_N = mkN "cantalupo" ; -- status=guess
+lin cantaloupe_N = mkN "cantalupo" | mkN "zatta" ; -- status=guess
 lin cantankerous_A = mkA "stizzoso" ; -- status=guess
 lin cantata_N = mkN "cantata" | mkN "oratorio" ; -- UWN
 lin canteen_N = mkN "mensa" ; -- status=guess
@@ -4434,7 +4433,6 @@ lin cave_in_V = mkV "cadere" | mkV "cedere" | mkV "crollare" | mkV "franare" | m
 lin caveat_N = mkN "avviso" ; -- status=guess
 lin caveman_N = mkN "cavernicolo" ; -- status=guess
 lin caviar_N = mkN "caviale" masculine ; -- status=guess
-lin caviare_N = mkN "caviale" ; -- UWN
 lin cavity_N = mkN "cavità" feminine ; -- status=guess
 lin cavy_N = mkN "cavia" ; -- UWN
 lin caw_N = mkN "gracchio" ; -- status=guess
@@ -15450,14 +15448,11 @@ lin licence_N = variants {} ; --
 lin license_V2 = variants {} ; --
 lin licentious_A = mkA "licenzioso" ; -- status=guess
 lin licentiousness_N = mkN "licenziosità" ; -- status=guess
-lin lichee_N = mkN "litchi" ; -- UWN
 lin lichen_N = mkN "lichene" masculine ; -- status=guess
 lin lichfield_PN = mkPN "Lichfield" ; -- status=guess src=geonames
-lin lichi_N = mkN "litchi" ; -- UWN
 lin lick_N = mkN "cazzotto" | mkN "pugno" ; -- UWN
 lin lick_V2 = mkV2 (mkV "leccare") ; -- status=guess, src=wikt
 lin licking_N = mkN "bastonatura" | mkN "batosta" | mkN "battuta" | mkN "legnata" | mkN "pestata" | mkN "picchiata" ; -- UWN
-lin licorice_N = mkN "liquirizia" ; -- UWN
 lin lid_N = mkN "coperchio" ; -- status=guess
 lin lie_1_V = L.lie_V ;
 lin lie_2_V = mkV "mentire" ;
@@ -15625,8 +15620,6 @@ lin listening_N = mkN "ascoltazione" | mkN "ascolto" ; -- UWN
 lin listing_N = mkN "elencazione" ; -- UWN
 lin listlessness_N = mkN "intorpidimento" | mkN "torpidezza" ; -- UWN
 lin litany_N = mkN "litania" ; -- UWN
-lin litchee_N = mkN "litchi" ; -- UWN
-lin litchi_N = mkN "litchi" ; -- UWN
 lin literacy_N = mkN "alfabetismo" | mkN "alfabetizzazione" feminine ; -- status=guess status=guess
 lin literal_A = mkA "letterale" ; -- status=guess
 lin literal_N = mkN "refuso" ; -- UWN
@@ -17170,7 +17163,6 @@ lin molar_A = mkA "molare" ; -- status=guess
 lin molar_N = mkN "dente molare" | mkN "molare" masculine ; -- status=guess status=guess
 lin molarity_N = mkN "molarità" feminine ; -- status=guess
 lin molasses_N = mkN "melassa" ; -- status=guess
-lin mold_N = mkN "stampo" | mkN "calco" ; -- status=guess status=guess
 lin mold_PN = mkPN "Mold" ; -- status=guess src=geonames
 lin molding_N = mkN "cimasa" ; -- status=guess
 lin moldy_A = mkA "ammuffito" ; -- UWN
@@ -17397,7 +17389,7 @@ lin motorway_N = mkN "autostrada" ; -- status=guess
 lin motto_N = mkN "divisa" | mkN "motto" | mkN "slogan" ; -- UWN
 lin mouflon_N = mkN "muflone" masculine ; -- status=guess
 lin moujik_N = mkN "mugic" | mkN "mugik" ; -- UWN
-lin mould_N = variants {} ; --
+lin mould_N = mkN "stampo" | mkN "calco" ; -- status=guess status=guess
 lin mouldy_A = mkA "ammuffito" ; -- status=guess
 lin moult_N = mkN "muta" | mkN "muda" ; -- status=guess status=guess
 lin moult_V = mkV "mutare" | mkV (I.fare_V) "la muta" ; -- status=guess, src=wikt status=guess, src=wikt
@@ -23224,7 +23216,7 @@ lin scald_N = mkN "bruciatura" ; -- UWN
 lin scale_N = mkN "bilancia" ; -- status=guess
 lin scalene_A = mkA "scaleno" ; -- status=guess
 lin scalenus_N = mkN "scaleno" ; -- UWN
-lin scallop_N = mkN "capasanta" ; -- status=guess
+lin scallop_N = mkN "capasanta" | mkN "pettine" ; -- status=guess
 lin scalp_N = mkN "scalpo" ; -- status=guess
 lin scalp_V2 = mkV2 (mkV (I.fare_V) "lo scalpo") | mkV2 (mkV "scotennare") ; -- status=guess, src=wikt status=guess, src=wikt
 lin scalper_N = mkN "bagarino" ; -- status=guess
@@ -23334,7 +23326,6 @@ lin scold_V = mkV "sgridare" | mkV "rimproverare" | riprendere_V ; -- status=gue
 lin scold_V2 = mkV2 (mkV "sgridare") | mkV2 (mkV "rimproverare") | mkV2 (riprendere_V) ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin scolding_N = mkN "partaccia" | mkN "rabbuffo" | mkN "rimprovero" | mkN "strillata" | mkN "urlata" ; -- UWN
 lin scoliosis_N = mkN "scoliosi" feminine ; -- status=guess
-lin scollop_N = mkN "pettine" ; -- UWN
 lin scooter_N = mkN "monopattino" ; -- status=guess
 lin scope_N = variants {} ; --
 lin scopolamine_N = mkN "scopolamina" ; -- UWN
@@ -28598,7 +28589,6 @@ lin vinegar_N = mkN "aceto" ; -- status=guess
 lin vinegariness_N = mkN "acetosità" ; -- UWN
 lin vinery_N = mkN "vigna" ; -- UWN
 lin vineyard_N = mkN "vigna" | mkN "vigneto" ; -- status=guess status=guess
-lin vino_N = mkN "vino" ; -- UWN
 lin vintage_N = mkN "annata" ; -- UWN
 lin vintner_N = mkN "vinificatore" masculine ; -- status=guess
 lin vinyl_N = mkN "vinile" masculine ; -- status=guess
@@ -29175,7 +29165,6 @@ lin whirlpool_N = mkN "vortice" | mkN "mulinello" ; -- status=guess status=guess
 lin whirr_N = mkN "brusio" | mkN "frullo" ; -- UWN
 lin whisker_N = mkN "pelo" ; -- status=guess
 lin whiskey_N = mkN "whisky" masculine ; -- status=guess
-lin whisky_N = mkN "whisky" ; -- UWN
 lin whisper_N = mkN "sussurro" ; -- status=guess
 lin whisper_V = mkV "sussurrare" ; -- status=guess, src=wikt
 lin whisper_V2 = mkV2 (mkV "sussurrare") ; -- status=guess, src=wikt
