@@ -46,11 +46,12 @@ oper
 
   mkNomReg : Str -> Noun = \mec ->
     case mec of {
-      _ + ("o" | "e" | "é" | "á") => mkNoun (nomVino mec) Masc ;  --bebé, papá; how about other accented vocal endings? champú champúes
+      _ + ("o" | "e" | "é" | "á") => mkNoun (nomVino mec) Masc ;  --bebé, papá; how about other accented vocal endings? champú champúes. DVH: mixed useage for í and ú (cf. DPD). Some nouns take both plurals, one being more formal (bisturí-bisturíes-bisturís); some everyday words only take -s (champú-champús); demonyms only take -es (israelí-israelíes), etc.
       _ + "a" => mkNoun (nomVino mec) Fem ;
       _ + "z" => mkNounIrreg mec (init mec + "ces") Fem ;
       _ + "ión" => mkNounIrreg mec (tk 2 mec + "ones") Fem ;
-      _ + "tud" => mkNounIrreg mec (mec + "es") Fem ;
+      _ + ("tud" | "tad" | "dad" | "ed") => mkNounIrreg mec (mec + "es") Fem ;
+      _ + "tis" => mkNounIrreg mec mec Fem ; --Mainly medical terms.
       _ + "án" => mkNounIrreg mec (tk 2 mec + "anes") Masc ;
       _ + "én" => mkNounIrreg mec (tk 2 mec + "enes") Masc ;
       _ + "ín" => mkNounIrreg mec (tk 2 mec + "ines") Masc ;
