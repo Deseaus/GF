@@ -223,11 +223,7 @@ oper
 
 -- To form reflexive verbs:
 
-    reflV : V -> V ; -- reflexive verb
---  reflV : overload {
---     reflV : V -> V ; -- reflexive verb
---     reflV : Str -> V ;
---    } ;
+  reflV : V -> V ; -- reflexive verb
 
 -- Verbs with a deviant passive participle: just give the participle
 -- in masculine singular form as second argument.
@@ -398,10 +394,6 @@ oper
     in verbBesch verb ** {vtyp = VHabere ; p = [] ; lock_V = <>} ;
 
   reflV v = v ** {vtyp = VRefl} ;
---  reflV = overload {
---   reflV : V -> V = \v ->  v ** {vtyp = VRefl} ;
---   reflV : Str -> V = \s -> mkV s ** {vtyp = VRefl} ;
---   } ;
 
   verboV ve = verbBesch ve ** {vtyp = VHabere ; p = [] ; lock_V = <>} ;
 
