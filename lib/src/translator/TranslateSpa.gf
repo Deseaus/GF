@@ -1,4 +1,4 @@
---# -path=.:../chunk:alltenses
+--# -path=.:../chunk:alltenses:../style
 
 concrete TranslateSpa of Translate = 
   TenseSpa,
@@ -30,6 +30,13 @@ concrete TranslateSpa of Translate =
     , PastPartAP, PastPartAgentAP, PresPartAP, GerundNP, GerundAdv
     , WithoutVP, InOrderToVP, ByVP
     ],
+
+
+  -- #################### START THESIS #################################
+
+  WikiStyleSpa,
+
+  -- #################### END THESIS #################################
 
   DictionarySpa ** 
 open MorphoSpa, ResSpa, ParadigmsSpa, SyntaxSpa, (E = ExtraSpa), (G = GrammarSpa), Prelude in {

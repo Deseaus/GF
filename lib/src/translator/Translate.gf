@@ -1,3 +1,4 @@
+--# -path=.:../style:../chunk
 abstract Translate = 
 
 -- modules in Grammar, excluding Structural
@@ -30,7 +31,13 @@ abstract Translate =
     , WithoutVP, InOrderToVP, ByVP
     ],
   Dictionary,
-  Documentation
+  Documentation,
+
+  -- #################### START THESIS #################################
+
+  WikiStyle
+
+  -- #################### END THESIS #################################
 
               ** {
 flags
