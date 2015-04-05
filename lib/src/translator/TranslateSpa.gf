@@ -34,7 +34,8 @@ concrete TranslateSpa of Translate =
 
   -- #################### START THESIS #################################
 
-  WikiStyleSpa,
+ WikiParse,
+
 
   -- #################### END THESIS #################################
 
