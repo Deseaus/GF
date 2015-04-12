@@ -1,30 +1,49 @@
-concrete WikiParse of Wiki = CatSpa, SymbolSpa ** open Prelude in {
+--# -path=.:alltenses:../chunk:../style:../translator
 
-lincat Top = SS ;
-lincat S2,C = {correct,alternatives,hint : Str} ;
+concrete WikiParse of Wiki = CatSpa, SymbolSpa, ChunkSpa ** open Prelude in {
 
-lin top s = ss(s.alternatives) ;
+lincat CS,C = {approved,options,hint : Str} ;
 
-lin TopToPhr t = ss(t.s) ;
+    StyleHintBase = {hint: Str} ;
+    StyleHintNP = StyleHintBase ** {options : NP} ;
+    StyleHintPhr = StyleHintBase ** {options : Phr} ;
+    StyleRuleNP = StyleHintNP ** {approved : NP} ;
+    StyleRulePhr = StyleHintPhr ** {approved : Phr} ;
+
+lin CtoChunk c = ss c.options ;
+
+
+--fun AcNP = 
+--fun BNP : StyleRuleNP ;
 
 lin OneC c = c ;
 lin ConsC c s = {
-  correct = c.correct ++ s.correct ; 
-  alternatives = c.alternatives ++ s.alternatives ; 
+  approved = c.approved ++ s.approved ; 
+  options = c.options ++ s.options ; 
   hint = c.hint ++ s.hint
   } ;
 
 lin Ac = mkC "A" "a" "use capital A" ;
 lin B = mkC "B" "b" "use capital B" ;
 
-lin makeSymb s = mkC s.s s.s s.s ;
+--lin makeSymb s = mkC s.s s.s s.s ;
 
-lin quoted s = 
-  mkC ("«" ++ s.correct ++ "»") 
-      ("'" ++ s.alternatives ++ "'") 
+--lin quoted s = 
+--  mkC ("«" ++ s.approved ++ "»") 
+--      ("'" ++ s.options ++ "'") 
+--      "use angular quotes" ; 
+
+lin quoted p = 
+  mkC ("«" ++ p.s ++ "»") 
+      ("'" ++ p.s ++ "'") 
       "use angular quotes" ; 
 
-oper mkC : (_,_,_ : Str) -> {correct,alternatives,hint : Str} = \c,a,h ->
-  {correct = c ; alternatives = a | c ; hint = "|||" ++ h ++ "|||" } ;
+oper mkC : (_,_,_ : Str) -> {approved,options,hint : Str} = \c,a,h ->
+  {approved = c ; options = a | c ; hint = h } ;
+  --{approved = c ; options = a | c ; hint = "|||" ++ h ++ "|||" } ;
 
-}
+oper mkStyleRuleNP : (_,_ : NP) -> Str -> StyleRuleNP = \a,o,h ->
+  lin StyleHintBase {approved = a ; options = a | o ; hint = h } ;
+  --{approved = c ; options = a | c ; hint = "|||" ++ h ++ "|||" } ;
+
+} ;

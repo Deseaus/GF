@@ -1,5 +1,5 @@
-concrete WikiLinearize of Wiki = WikiParse - [top] ** open Prelude in {
+concrete WikiEdit of Wiki = WikiParse - [mkCPhr] ** open Prelude in {
 
-lin top s = ss s.correct ;
+lin mkCPhr cs = ss cs.approved ;
 
 }

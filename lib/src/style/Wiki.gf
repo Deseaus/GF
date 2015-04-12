@@ -1,19 +1,24 @@
-abstract Wiki = Cat, Symbol ** {
+--# -path=.:alltenses:../chunk:../style:../translator
 
-flags startcat = Top ;
+abstract Wiki = Cat, Symbol, Chunk ** {
 
-cat Top ; S2 ; C ;
+flags startcat = Phr ;
 
-fun TopToPhr : Top -> Phr ;
-fun top : S2 -> Top ;
+cat CS ; C ;
+cat StyleHintBase ; StyleHintNP ; StyleHintPhr ; StyleRuleNP ; StyleRulePhr ;
 
-fun OneC : C -> S2 ;
-fun ConsC : C -> S2 -> S2 ;
+--fun mkCPhr : CS -> Phr ;
+
+fun OneC : C -> CS ;
+fun ConsC : C -> CS -> CS ;
+
+--fun makeSymb : Symb -> C ;
+
+fun CtoChunk : C -> Chunk ;
 
 fun Ac : C ;
 fun B : C ;
-
-fun makeSymb : Symb -> C ;
-fun quoted : S2 -> C ;
+--fun quoted : CS -> C ;
+fun quoted : Phr -> C ;
 
 }

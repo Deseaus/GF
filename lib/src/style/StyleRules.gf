@@ -1,0 +1,8 @@
+resource StyleRules = {
+
+oper
+
+    mkStyleRuleNP : (
+
+
+}

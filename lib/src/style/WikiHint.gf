@@ -1,5 +1,8 @@
-concrete WikiHint of Wiki = WikiParse - [top] ** open Prelude in {
+concrete WikiHint of Wiki = WikiParse - [CtoChunk] ** open Prelude in {
+--concrete WikiHint of Wiki = WikiParse - [mkCPhr, CtoChunk] ** open Prelude in {
 
-lin top s = ss s.hint ;
+--lin mkCPhr cs = ss cs.hint ;
+
+lin CtoChunk c = ss (c.hint ++ c.options) ;
 
 }
