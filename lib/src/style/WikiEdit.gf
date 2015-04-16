@@ -1,8 +1,4 @@
---concrete WikiEdit of Wiki = WikiParse - [mkCPhr, CtoChunk] ** open Prelude in {
-concrete WikiEdit of Wiki = WikiParse - [CtoChunk] ** open Prelude in {
-
---lin mkCPhr cs = ss cs.approved ;
-
-lin CtoChunk c = ss c.approved ;
-
-}
+concrete WikiEdit of Wiki = WikiParse ** RuleToChunkFunctor with
+(RuleComponents = RuleComponentsApproved),
+(Cat = CatSpa)
+** open ParadigmsSpa in {}

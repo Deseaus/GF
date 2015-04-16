@@ -1,8 +1,10 @@
-concrete WikiHint of Wiki = WikiParse - [CtoChunk] ** open Prelude in {
---concrete WikiHint of Wiki = WikiParse - [mkCPhr, CtoChunk] ** open Prelude in {
+concrete WikiHint of Wiki = WikiParse ** RuleToChunkFunctor - [RuleNPtoNP, RuleNtoN] with
+(RuleComponents = RuleComponentsHint),
+(Cat = CatSpa)
+** open ParadigmsSpa in {
 
---lin mkCPhr cs = ss cs.hint ;
+lin
 
-lin CtoChunk c = ss (c.hint ++ c.options) ;
-
+    RuleNPToStr = ruleSelect ;
+    RuleNToStr r = ruleSelect r ;
 }
