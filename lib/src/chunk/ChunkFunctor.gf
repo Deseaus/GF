@@ -13,7 +13,9 @@ lin
   OneChunk c = c ;
   PlusChunk c cs = cc2 c cs ;
 
-  ChunkPhr c = ss ("*" ++ c.s) | c ;
+  -- NOTE: Removed the initial star.
+  --ChunkPhr c = ss ("*" ++ c.s) | c ;
+  ChunkPhr c = ss c.s | c ;
 
 lin
   AP_Chunk ap = mkUtt ap ;

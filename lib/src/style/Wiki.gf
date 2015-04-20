@@ -1,6 +1,8 @@
 --# -path=.:alltenses:../chunk:../style:../translator
 
-abstract Wiki = Cat, Symbol, Chunk, StyleCatAbs, RuleToChunkAbs
+abstract Wiki = Cat, Symbol, Chunk, StyleCatAbs
+, RuleToRGL
+--, RuleToHint
 --, Syntax 
 ** {
 
