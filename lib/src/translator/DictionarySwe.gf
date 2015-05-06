@@ -20927,6 +20927,7 @@ lin ferret_V2 = variants {} ; -- status=guess
 lin ferric_A = variants {} ; -- status=guess
 lin ferricyanide_N = mkN "ferricyanid"; -- src=google
 lin ferrimagnetism_N = mkN "ferrimagnetism" ; -- status=guess
+lin ferris_wheel_N = mkN "pariserhjul" "pariserhjul" ;
 lin ferrite_N = mkN "ferrit" "ferriter" ;
 lin ferritin_N = variants {} ; -- status=guess
 lin ferrocerium_N = mkN "auermetall"; -- src=google
@@ -27160,7 +27161,7 @@ lin huffiness_N = variants {} ; -- status=guess
 lin huffish_A = variants {} ; -- status=guess
 lin huffy_A = mkA "irriterad" | mkA "arg" ; -- status=guess status=guess
 lin hug_N = mkN "kram" neutrum ; -- comment=3
-lin hug_V2 = dirV2 (partV (mkV "kramar")"ut") ; -- comment=2
+lin hug_V2 = mkV2 (mkV "kramar") ;
 lin huge_A = mkA "väldig" ;
 lin hugely_Adv = adjAdv huge_A ; -- derived -- derived
 lin hugger_N = variants {} ; -- status=guess
@@ -40652,8 +40653,6 @@ lin passee_A = variants {} ; -- status=guess
 lin passenger_N = mkN "passagerare" utrum | mkN "passagerare" utrum ; -- SaldoWN -- comment=2
 lin passepartout_N = mkN "passepartout" "passepartouter" ;
 lin passer_N = mkN "förbipasserande" | mkN "förbigående" ; -- status=guess status=guess
-lin passer_by_N = mkN "förbipasserande"; -- src=google
-lin passerby_N = mkN "förbipasserande"; -- src=google
 lin passerine_A = variants {} ; -- status=guess
 lin passerine_N = mkN "tätting" ; -- SaldoWN
 lin passim_Adv = variants {} ; -- status=guess
@@ -58048,7 +58047,7 @@ lin tocsin_N = variants {} ; -- status=guess
 lin tod_A = variants {} ; -- status=guess
 lin tod_N = variants {} ; -- status=guess
 lin today_Adv = L.today_Adv ;
-lin today_N = mkN "dag" ; -- status=guess
+lin today_N = mkN "idag";
 lin toddle_V = mkV "gå" "går" "gå" "gick" "gått" "gången" ; -- comment=5
 lin toddle_off_V = mkV "gå" "går" "gå" "gick" "gått" "gången" ; -- comment=5
 lin toddler_N = mkN "småbarn" ; -- status=guess
