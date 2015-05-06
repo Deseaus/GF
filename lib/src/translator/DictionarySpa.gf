@@ -2490,7 +2490,7 @@ lin autosuggestion_N = mkN "autosugestión" ; --UWN
 lin autotelic_A = mkA "autotélico" ; --UWN
 lin autotomy_N = mkN "autotomía" ; -- status=guess
 lin autotypic_A = mkA "autotípico" ; --UWN
-lin autumn_N = mkN "otoño" ; -- status=guess
+lin autumn_N = mkN "otoño" ;
 lin autumnal_A = mkA "otoñal" ; -- status=guess
 lin auxetic_A = mkA "auxético" ; --UWN
 lin auxiliary_A = mkA "auxiliar" ; -- status=guess
@@ -27625,7 +27625,7 @@ lin sprechgesang_N = mkN "sprechgesang" ; --UWN
 lin spree_N = mkN "aventura_amorosa" | mkN "cana_al_aire" ; --UWN
 lin sprig_N = mkN "ramita" ; -- status=guess
 lin sprightliness_N = mkN "vida" ; --UWN
-lin spring_1_N = mkN "primavera" masculine ; -- status=guess
+lin spring_1_N = mkN "primavera" ; 
 lin spring_2_N = mkN "resorte" ; -- status=guess
 lin spring_3_N = mkN "origen" masculine ; -- status=guess
 lin spring_4_N = mkN "subida" masculine ; -- status=guess
