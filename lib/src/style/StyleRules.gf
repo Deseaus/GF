@@ -1,6 +1,7 @@
 resource StyleRules = open StyleCat, Prelude, ChunkSpa, SyntaxSpa, ParadigmsSpa 
 , Typography
 , Punctuation --Punctuation types
+, ListSpa --PhrList type
 in {
 
 
@@ -17,6 +18,7 @@ oper
         mkStyleHint : NP -> Str -> StyleHint ;
         mkStyleHint : N -> Str -> StyleHint ;
         mkStyleHint : Str -> Str -> StyleHint ;
+        mkStyleHint : PhrList -> Str -> StyleHint ;
     } ;
 
     mkStyleLookup : StyleHint -> StyleLookup = \h -> lin StyleLookup h ;
@@ -25,11 +27,23 @@ oper
 
 -- BASIC TYPE STRUCTURES
 
-    style : Chunk -> Chunk -> Str -> StyleRule = \a,o,h ->
-        lin StyleRule {approved = a ; options = a | o ; hint = ss (delimitHint h)} ;
+    style = overload {
+        style : Chunk -> Chunk -> Str -> StyleRule = \a,o,h ->
+            lin StyleRule {approved = a ; options = a | o ; hint = ss (delimitHint h)} ;
+        --Add additional Str for hints that include a Phr which might itself include
+        --more hints in the Phr.s field.
+        style : Chunk -> Chunk -> Str -> Str -> StyleRule = \a,o,h,morehint ->
+            lin StyleRule {approved = a ; options = a | o ; hint = ss ((delimitHint h) ++ morehint)} ;
+    } ;
 
-    hint : Chunk -> Str -> StyleHint = \o,h ->
-        lin StyleHint {options = o ; hint = ss (delimitHint h)} ;
+    hint = overload {
+        hint : Chunk -> Str -> StyleHint = \o,h ->
+            lin StyleHint {options = o ; hint = ss (delimitHint h)} ;
+        --Add additional Str for hints that include a Phr which might itself include
+        --more hints in the Phr.s field.
+        hint : Chunk -> Str -> Str -> StyleHint = \o,h,t ->
+            lin StyleHint {options = o ; hint = ss ((delimitHint h) ++ t)} ;
+    } ;
 
     delimitHint : Str -> Str = \s -> "|||" ++ s ++ "|||" ;
 
@@ -50,7 +64,7 @@ oper
         mkStyleRule : Str -> Str -> Str -> StyleRule =
             \a,o,h -> style (ss a) (ss o) h ;
         mkStyleRule : Surround -> Surround -> Phr -> Str -> StyleRule = \a,o,p,h ->
-        style (ss (addSurround p.s a)) (ss (addSurround p.s o)) h ;
+        style (ss (addSurround p.s a)) (ss (addSurround p.s o)) h p.s ;
     } ;
 
     mkStyleHint = overload {
@@ -60,6 +74,8 @@ oper
             \o,h -> hint (chunkNP (mkNP o)) h ;
         mkStyleHint : Str -> Str -> StyleHint =
             \o,h -> hint (ss o) h ;
+        mkStyleHint : PhrList -> Str -> StyleHint =
+            \o,h -> hint (ss o.s) h o.s ;
     } ;
 
 }

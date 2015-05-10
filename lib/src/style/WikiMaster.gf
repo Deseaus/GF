@@ -4,8 +4,11 @@ concrete WikiMaster of Wiki =
 SymbolSpa [MkSymb, Symb]
 , ChunkSpa
 , StyleCat
+-- For the rules and hints:
 , SeasonSpa
+, ListSpa
 ** open Prelude, StyleRules, ParadigmsSpa, SyntaxSpa 
+-- For the rules and hints:
 , ManualDeEstilo
 , Typography
 in {
@@ -35,10 +38,12 @@ lin Quote_Rule p = mkStyleRule guillemet_Surround (double_straight_Surround | do
 -- TEXT 2: Charlotte Gyllenhammar
 
 ---- 2.A. Lists in chronological order
+lin ChronologicalLists_Hint l = mkStyleHint l W_23_Chronological_lists ;
 ---- 2.B. Capitalisation for Names
 ---- 2.C. Avoid deictic and anaphoric expressions that refer to the time of writing
+lin Present_reference_Hint = mkStyleHint ( "recientemente" |  "hoy" |  "ahora" |  "actualmente" ) W_17_Deictic_expressions ;
 ---- 2.D. Slash sign optionality
-lin Slash_Optionality = mkStyleLookup (mkStyleHint forward_slash_Str DPD_Barra_b) ;
+lin Slash_Optionality_Lookup = mkStyleLookup (mkStyleHint forward_slash_Str DPD_Barra_b) ;
 
 -- TEXT 3: Garfield
 

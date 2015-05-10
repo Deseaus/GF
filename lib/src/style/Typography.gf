@@ -15,6 +15,8 @@ mkSurround = overload {
 forward_slash_Str : Str = "/" ;
 backslash_Str : Str = "\\" ;
 em_dash_Str : Str = "—" ;
+comma_Str : Str = "," ;
+semicolon_Str : Str = ";" ;
 
 -- Parentheses
 
