@@ -21099,6 +21099,7 @@ lin ferret_out_V2 = variants {} ;
 lin ferric_A = variants {} ;
 lin ferricyanide_N = variants {} ;
 lin ferrimagnetism_N = variants {} ;
+lin ferris_wheel_N = mkN "Riesenrad" "Riesenräder" neuter ;
 lin ferrite_N = mkN "Ferrit" neuter ; -- status=guess
 lin ferritin_N = variants {} ;
 lin ferrocerium_N = variants {} ;
@@ -41020,8 +41021,6 @@ lin passee_A = variants {} ;
 lin passenger_N = mkN "Passagier" "Passagiere" masculine | mkN "Fahrgast" "Fahrgäste" masculine ; -- status=guess status=guess
 lin passepartout_N = variants {} ;
 lin passer_N = mkN "Passant" "Passanten" masculine | mkN "Passantin" feminine ; -- status=guess status=guess
-lin passer_by_N = variants {} ;
-lin passerby_N = variants {} ;
 lin passerine_A = variants {} ;
 lin passerine_N = variants {} ;
 lin passim_Adv = mkAdv "passim" ; -- status=guess

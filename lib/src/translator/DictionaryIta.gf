@@ -10084,6 +10084,7 @@ lin ferocity_N = mkN "ferocia" | mkN "ferocità" | mkN "furia" | mkN "impeto" | 
 lin ferrara_PN = mkPN "Ferrara" ; -- status=guess src=geonames
 lin ferret_N = mkN "furetto" ; -- status=guess
 lin ferric_A = mkA "ferrigno" | mkA "ferroso" ; -- UWN
+lin ferris_wheel_N = mkN "ruota panoramica" "ruote panoramiche" feminine ;
 lin ferrite_N = mkN "ferrite" ; -- UWN
 lin ferritin_N = mkN "ferritina" ; -- UWN
 lin ferroconcrete_N = mkN "cemento_armato" ; -- UWN
@@ -19200,7 +19201,6 @@ lin passageway_N = mkN "corsia" ; -- status=guess
 lin passbook_N = mkN "libretto" | mkN "libretto_a_risparmio" | mkN "libretto_di_risparmio" ; -- UWN
 lin passenger_N = mkN "passeggero" ; -- status=guess
 lin passer_N = mkN "passante" masculine | mkN "passanti" masculine ; -- status=guess status=guess
-lin passerby_N = mkN "passante" ; -- UWN
 lin passion_N = mkN "passione" feminine ; -- status=guess
 lin passionate_A = mkA "appassionato" ; -- status=guess
 lin passionflower_N = mkN "passiflora" ; -- UWN

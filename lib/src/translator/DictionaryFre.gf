@@ -11392,6 +11392,7 @@ lin ferrara_PN = mkPN "Ferrare" ; -- status=guess src=geonames
 lin ferret_N = mkN "furet" masculine ; -- tocheck
 lin ferric_A = mkA "ferreux" ; -- UWN
 lin ferrimagnetism_N = mkN "ferrimagnétisme" ; -- UWN
+lin ferris_wheel_N = mkN "grande roue" "grandes roues" feminine ;
 lin ferrite_N = mkN "ferrite" ; -- UWN
 lin ferritin_N = mkN "ferritine" ; -- UWN
 lin ferroconcrete_N = mkN "béton_armé" ; -- UWN
@@ -21544,8 +21545,7 @@ lin pass_up_V2 = prepV2 OP_pass_V OP_up_Prep ; -- guess-p-verb
 lin passage_N = mkN "passage" masculine ; -- tocheck
 lin passageway_N = mkN "passage" masculine ; -- tocheck
 lin passenger_N = mkN "passager" masculine ; -- tocheck
-lin passer_by_N = mkN "passant" masculine ; -- tocheck
-lin passerby_N = mkN "passant" | mkN "passante" | mkN "passer" ; -- UWN
+lin passer_N = mkN "passant" masculine | mkN "passante" | mkN "passer" ; -- UWN
 lin passing_N = mkN "passing" masculine ; -- tocheck
 lin passion_N = mkN "passion" feminine | mkN "Passion" feminine ; -- tocheck
 lin passionate_A = mkA "passionné" ; -- tocheck

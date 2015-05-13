@@ -20927,6 +20927,7 @@ lin ferret_V2 = variants {} ; -- status=guess
 lin ferric_A = variants {} ; -- status=guess
 lin ferricyanide_N = mkN "ferricyanid"; -- src=google
 lin ferrimagnetism_N = mkN "ferrimagnetism" ; -- status=guess
+lin ferris_wheel_N = mkN "pariserhjul" "pariserhjul" ;
 lin ferrite_N = mkN "ferrit" "ferriter" ;
 lin ferritin_N = variants {} ; -- status=guess
 lin ferrocerium_N = mkN "auermetall"; -- src=google
@@ -27160,7 +27161,7 @@ lin huffiness_N = variants {} ; -- status=guess
 lin huffish_A = variants {} ; -- status=guess
 lin huffy_A = mkA "irriterad" | mkA "arg" ; -- status=guess status=guess
 lin hug_N = mkN "kram" neutrum ; -- comment=3
-lin hug_V2 = dirV2 (partV (mkV "kramar")"ut") ; -- comment=2
+lin hug_V2 = mkV2 (mkV "kramar") ;
 lin huge_A = mkA "väldig" ;
 lin hugely_Adv = adjAdv huge_A ; -- derived -- derived
 lin hugger_N = variants {} ; -- status=guess
@@ -31336,7 +31337,7 @@ lin landscape_V2 = variants {} ; -- status=guess
 lin landscaping_N = mkN "landskap" neutrum ;
 lin landscapist_N = mkN "landskapsmålare"; -- src=google
 lin landside_N = variants {} ; -- status=guess
-lin landslide_N = mkN "jordskredsseger" ; -- comment=4
+lin landslide_N = mkN "jordskred" neutrum | mkN "jordskredsseger" ; -- comment=4
 lin landslip_N = mkN "ras" neutrum ; -- comment=2
 lin landsman_N = mkN "landsman" "landsmannen" "landsmän" "landsmännen" ;
 lin landward_Adv = variants {} ; -- status=guess
@@ -36442,7 +36443,7 @@ lin mudguard_N = mkN "stänkskärm" ; -- status=guess
 lin mudhif_N = variants {} ; -- status=guess
 lin mudra_N = mkN "mudra";
 lin mudskipper_N = variants {} ; -- status=guess
-lin mudslide_N = (mkN "ras" "raser") | mkN "slamström" | mkN "lerskred" ; -- status=guess status=guess status=guess
+lin mudslide_N = (mkN "ras" "ras") | mkN "slamström" | mkN "lerskred" ; -- status=guess status=guess status=guess
 lin mudslinger_N = variants {} ; -- status=guess
 lin muesli_N = mkN "müsli" ; -- status=guess
 lin muezzin_N = variants {} ; -- status=guess
@@ -40652,8 +40653,6 @@ lin passee_A = variants {} ; -- status=guess
 lin passenger_N = mkN "passagerare" utrum | mkN "passagerare" utrum ; -- SaldoWN -- comment=2
 lin passepartout_N = mkN "passepartout" "passepartouter" ;
 lin passer_N = mkN "förbipasserande" | mkN "förbigående" ; -- status=guess status=guess
-lin passer_by_N = mkN "förbipasserande"; -- src=google
-lin passerby_N = mkN "förbipasserande"; -- src=google
 lin passerine_A = variants {} ; -- status=guess
 lin passerine_N = mkN "tätting" ; -- SaldoWN
 lin passim_Adv = variants {} ; -- status=guess
@@ -42576,8 +42575,8 @@ lin playfellow_N = mkN "lekkamrat" "lekkamrater" ;
 lin playful_A = mkA "lekfull" ; -- status=guess
 lin playfulness_N = mkN "lekfullhet" "lekfullheter" ;
 lin playgoer_N = mkN "teaterbesökare" utrum ;
-lin playground_N = mkN "skolgård" ; -- comment=5
-lin playgroup_N = mkN "play"; -- src=google
+lin playground_N = mkN "lekplats" ;
+lin playgroup_N = variants {};
 lin playhouse_N = mkN "teater" ; -- comment=2
 lin playing_N = mkN "spel" neutrum ; -- status=guess
 lin playing_card_N = mkN "spel-kort"; -- src=google
@@ -45622,8 +45621,7 @@ lin rabid_A = mkA "rabiat" "rabiat" ; -- SaldoWN
 lin rabies_N = mkN "rabies" ; -- SaldoWN
 lin raccoon_N = mkN "tvättbjörn" ; -- status=guess
 lin race_1_N = mkN "tävling" ;
-lin race_2_N = mkN "ras" "ras" ;
-lin race_N = mkN "ras" "raser" | mkN "tävling" | mkN "race" ; ---- alreadu split
+lin race_2_N = mkN "ras" "raser" ;
 lin race_V = mkV "tävla" ; -- status=guess
 lin race_V2 = variants {} ; -- mkV "tävla" ;
 lin race_V2V = variants {} ; -- mkV "tävla" ;
@@ -58048,7 +58046,7 @@ lin tocsin_N = variants {} ; -- status=guess
 lin tod_A = variants {} ; -- status=guess
 lin tod_N = variants {} ; -- status=guess
 lin today_Adv = L.today_Adv ;
-lin today_N = mkN "dag" ; -- status=guess
+lin today_N = mkN "idag";
 lin toddle_V = mkV "gå" "går" "gå" "gick" "gått" "gången" ; -- comment=5
 lin toddle_off_V = mkV "gå" "går" "gå" "gick" "gått" "gången" ; -- comment=5
 lin toddler_N = mkN "småbarn" ; -- status=guess
