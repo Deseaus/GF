@@ -13,18 +13,18 @@ concrete PhraseGer of Phrase = CatGer ** open Prelude, ResGer in {
 
     UttIP ip = {s = ip.s ! Nom} ; --- Acc also
     UttIAdv iadv = iadv ;
-    UttNP np = {s = np.s ! NPC Nom} ;
+    UttNP np = {s = np.s ! NPC Nom ++ bigNP np} ;
     UttVP vp = {s = useInfVP True vp} ;  -- without zu
     UttAdv adv = adv ;
     UttCN n = {s = n.s ! Strong ! Sg ! Nom} ;
     UttCard n = {s = n.s ! Neutr ! Nom} ;
-    UttAP ap = {s = ap.s ! APred} ;
+    UttAP ap = {s = ap.s ! APred ++ ap.ext} ;
     UttInterj i = i ;
 
     NoPConj = {s = []} ;
     PConjConj conj = ss (conj.s2) ;
 
     NoVoc = {s = []} ;
-    VocNP np = {s = "," ++ np.s ! NPC Nom} ;
+    VocNP np = {s = "," ++ np.s ! NPC Nom ++ bigNP np} ;
 
 }

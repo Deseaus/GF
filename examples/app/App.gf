@@ -1,11 +1,15 @@
+
+
 abstract App = 
   Translate - [
   -- Verb
-    SlashV2V,             -- replaced by more efficient inlined versions
+    SlashV2a,ComplSlash, -- replaced by a more efficient inlined version
+    SlashV2V,             
     Slash2V3, Slash3V3, SlashV2S, SlashV2Q, SlashV2A, 
     SlashVV, SlashV2VNP,
     AdvVPSlash, AdVVPSlash, VPSlashPrep,
   -- Sentence
+    SlashVP, SlashVS,
     PredSCVP, 
     AdvSlash, SlashPrep, SlashVS,
     EmbedS, EmbedQS, EmbedVP, RelS,
@@ -13,9 +17,10 @@ abstract App =
     ComplSlashIP,AdvQVP,AddAdvQVP,QuestQVP,
   -- Idiom
     CleftNP, CleftAdv,
-    ImpP3    
+    ImpP3,
   -- Construction
   -- Extensions
+    PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
   ,Phrasebook
 
@@ -28,10 +33,16 @@ fun
   PhrasePhr : Phrase -> Phr ;
   Phrase_Chunk : Phrase -> Chunk ;
 
+  ComplV2 : V2 -> NP -> VP ;
+  PassV2 : V2 -> VP ;
+  
+
+{-
   ComplV2V : V2V -> NP -> VP -> VP ;
   ComplV2A : V2A -> NP -> AP -> VP ;
   ComplV2Q : V2Q -> NP -> QS -> VP ;
   ComplV2S : V2S -> NP -> S  -> VP ;
   ComplV3  : V3  -> NP -> NP -> VP ;
+-}
 
 }

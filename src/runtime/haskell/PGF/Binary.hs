@@ -15,7 +15,7 @@ import qualified Data.IntMap as IntMap
 import Control.Monad
 
 pgfMajorVersion, pgfMinorVersion :: Word16
-version@(pgfMajorVersion, pgfMinorVersion) = (2,0)
+version@(pgfMajorVersion, pgfMinorVersion) = (2,1)
 
 instance Binary PGF where
   put pgf = do putWord16be pgfMajorVersion
@@ -23,11 +23,14 @@ instance Binary PGF where
                put (gflags pgf)
                put (absname pgf, abstract pgf)
                put (concretes pgf)
-  get = do v1 <- getWord16be
-           v2 <- getWord16be
-           case (v1,v2) of
-             v | v==version -> getPGF'
-               | v==Old.version -> Old.getPGF'
+  get = do major<- getWord16be
+           minor <- getWord16be
+           let v = (major,minor)
+           if major==pgfMajorVersion && minor<=pgfMinorVersion
+             then getPGF'
+             else if v==Old.version 
+                  then Old.getPGF'
+                  else fail $ "Unsupported PGF version "++show (major,minor)
 
 getPGF'=do gflags <- get
            (absname,abstract) <- get
@@ -213,10 +216,10 @@ instance Binary Symbol where
   put (SymKP d vs)       = putWord8 4 >> put (d,vs)
   put SymBIND            = putWord8 5
   put SymSOFT_BIND       = putWord8 6
-  put SymSOFT_SPACE      = putWord8 7
-  put SymCAPIT           = putWord8 8
-  put SymALL_CAPIT       = putWord8 9
-  put SymNE              = putWord8 10
+  put SymNE              = putWord8 7
+  put SymSOFT_SPACE      = putWord8 8
+  put SymCAPIT           = putWord8 9
+  put SymALL_CAPIT       = putWord8 10
   get = do tag <- getWord8
            case tag of
              0 -> liftM2 SymCat get get
@@ -226,10 +229,10 @@ instance Binary Symbol where
              4 -> liftM2 (\d vs -> SymKP d vs) get get
              5 -> return SymBIND
              6 -> return SymSOFT_BIND
-             7 -> return SymSOFT_SPACE
-             8 -> return SymCAPIT
-             9 -> return SymALL_CAPIT
-             10-> return SymNE
+             7 -> return SymNE
+             8 -> return SymSOFT_SPACE
+             9 -> return SymCAPIT
+             10-> return SymALL_CAPIT
              _ -> decodingError
 
 instance Binary PArg where

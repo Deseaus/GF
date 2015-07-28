@@ -109,6 +109,7 @@ resource ResDut = ParamX ** open Prelude, Predef in {
 param 
     VForm = 
        VInf      -- zijn
+     | VInfFull  -- zijn (including prefix, e.g. oplossen)
      | VPresSg1  -- ben 
      | VPresSg2  -- bent
      | VPresSg3  -- is
@@ -131,7 +132,7 @@ param
   mkVerb : (_,_,_,_,_,_,_ : Str) -> 
     	Verb = \aai, aait, aaien, aaide, _, aaiden, geaaid -> {
     	s = table {
-    		VInf | VImpPl | VPresPl   => aaien; -- hij/zij/het/wij aaien
+        VInf | VInfFull | VImpPl | VPresPl => aaien; -- hij/zij/het/wij aaien
     		VPresSg1 | VImp2 => aai; -- ik aai
     		VPresSg2 | VPresSg3 | VImp3 => aait; -- jij aait
     		VPastSg => aaide; -- ik aaide  --# notpresent
@@ -159,12 +160,12 @@ param
   prefixV : Str -> VVerb -> VVerb = \ein,verb ->
     let
       vs = verb.s ;
-      einb : Bool -> Str -> Str = \b,geb -> 
-        if_then_Str b (ein + geb) geb ;
+      -- einb : Bool -> Str -> Str = \b,geb -> 
+      --  if_then_Str b (ein + geb) geb ;
     in
     {s = table {
-      f@(VInf | VPerf) => ein + vs ! f ; ---- TODO: eingegeven
-      f       => vs ! f
+      f@(VInfFull | VPerf) => ein + vs ! f; 
+      f => vs ! f
       } ;
      prefix = ein ;
      aux = verb.aux ;
@@ -281,6 +282,7 @@ param
   zijn_V : VVerb = {
     s = table {
        VInf      => "zijn" ;
+       VInfFull  => "zijn" ;
        VPresSg1  => "ben" ; 
        VPresSg2  => "bent" ;
        VPresSg3  => "is" ;
@@ -303,6 +305,7 @@ param
   hebben_V : VVerb = {
     s = table {
        VInf      => "hebben" ;
+       VInfFull  => "hebben" ;
        VPresSg1  => "heb" ; 
        VPresSg2  => "hebt" ;
        VPresSg3  => "heeft" ;
@@ -325,6 +328,7 @@ param
   zullen_V : VVerb = {
     s = table {
        VInf      => "zullen" ;
+       VInfFull  => "zullen" ;
        VPresSg1  => "zal" ; 
        VPresSg2  => "zult" ;
        VPresSg3  => "zal" ;
@@ -347,6 +351,7 @@ param
   kunnen_V : VVerb = {
     s = table {
        VInf      => "kunnen" ;
+       VInfFull  => "kunnen" ;
        VPresSg1  => "kan" ; 
        VPresSg2  => "kunt" ;
        VPresSg3  => "kan" ; ---- kun je
@@ -383,7 +388,7 @@ param
          a = {g = g ; n = n ; p = p}
          } ;
 
-    het_Pron : Pronoun = mkPronoun "'t" "'t" "ze" "hij" "hem" "zijn" "zijne" Neutr Sg P3 ;
+    het_Pron : Pronoun = mkPronoun "het" "het" "ze" "hij" "hem" "zijn" "zijne" Neutr Sg P3 ; -- cunger: 't -> het 
 
 
 -- Complex $CN$s, like adjectives, have strong and weak forms.
@@ -470,6 +475,8 @@ param
         _ => AAttr
         } ;
 
+  param NegPosition = BeforeObjs | AfterObjs | BetweenObjs;
+
   oper VP : Type = {
       s  : VVerb ;
       a1 : Polarity => Str ; -- niet
@@ -477,15 +484,14 @@ param
       n2 : Agr => Str ;      -- je vrouw
       a2 : Str ;             -- vandaag
       isAux : Bool ;         -- is a double infinitive
-      negBeforeObj : Bool ;  -- ik schoop X niet ; ik houd niet van X ; dat is niet leuk
+      negPos : NegPosition ; -- ik schoop X niet ; ik houd niet van X ; dat is niet leuk
       inf : Str * Bool ;     -- zeggen (True = non-empty)
       ext : Str              -- dat je komt
       } ;
 
-  predV : VVerb -> VP = predVGen False ;
+  predV : VVerb -> VP = predVGen False AfterObjs;
 
-
-  predVGen : Bool -> VVerb -> VP = \isAux, verb -> {
+  predVGen : Bool -> NegPosition -> VVerb -> VP = \isAux, negPos, verb -> {
     s = verb ;
     a1  : Polarity => Str = negation ;
     n0  : Agr => Str = \\a => case verb.vtype of {
@@ -494,8 +500,8 @@ param
       } ;
     n2  : Agr => Str = \\a => [] ;
     a2  : Str = [] ;
-    isAux = isAux ; ----
-    negBeforeObj = False ;
+    isAux = isAux ; 
+    negPos = negPos ;
     inf : Str * Bool = <[],False> ;
     ext : Str = []
     } ;
@@ -507,18 +513,18 @@ param
 
 -- Extending a verb phrase with new constituents.
 
-  --when we call it with a normal VP, just copy the negBeforeObj field of the vp
-  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> insertObjNP False vp.negBeforeObj obj vp;
+  --when we call it with a normal VP, just copy the negPos field of the vp
+  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> insertObjNP False vp.negPos obj vp;
 
   --this is needed when we call insertObjNP in ComplSlash: VPSlash is a subtype of VP so it works
-  insertObjNP : Bool -> Bool -> (Agr => Str) -> VP -> VP = \isPron,negBeforeObj,obj,vp -> {
+  insertObjNP : Bool -> NegPosition -> (Agr => Str) -> VP -> VP = \isPron,negPos,obj,vp -> {
     s = vp.s ;
     a1 = vp.a1 ;
     n0 = \\a => case isPron of {True  => obj ! a ; _ => []} ++ vp.n0 ! a ;
     n2 = \\a => case isPron of {False => obj ! a ; _ => []} ++ vp.n2 ! a ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
-    negBeforeObj = negBeforeObj ;
+    negPos = negPos ;
     inf = vp.inf ;
     ext = vp.ext
     } ;
@@ -530,7 +536,7 @@ param
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
-    negBeforeObj = vp.negBeforeObj ;
+    negPos = vp.negPos ;
     inf = vp.inf ;
     ext = vp.ext
     } ;
@@ -542,7 +548,7 @@ param
     n2 = vp.n2 ;
     a2 = vp.a2 ++ adv ;
     isAux = vp.isAux ;
-    negBeforeObj = vp.negBeforeObj ;
+    negPos = vp.negPos ;
     inf = vp.inf ;
     ext = vp.ext
     } ;
@@ -554,7 +560,7 @@ param
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
-    negBeforeObj = vp.negBeforeObj ;
+    negPos = vp.negPos ;
     inf = vp.inf ;
     ext = vp.ext ++ ext
     } ;
@@ -566,7 +572,7 @@ param
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ; ----
-    negBeforeObj = vp.negBeforeObj ;
+    negPos = vp.negPos ;
     inf = <inf ++ vp.inf.p1, True> ;
     ext = vp.ext
     } ;
@@ -598,32 +604,30 @@ param
           obj0  = vp.n0 ! agr ;
           obj   = vp.n2 ! agr ;
 	  part  = vp.s.particle ;
-	  compl = case vp.negBeforeObj of {
-	    True => neg ++ obj0 ++ obj ++ part ++ vp.a2 ++ vp.s.prefix ;
-	    _    => obj0 ++ obj ++ neg ++ part ++ vp.a2 ++ vp.s.prefix 
+	  compl = case vp.negPos of {
+	    BeforeObjs  => neg ++ obj0 ++ obj ++ part ++ vp.a2 ++ vp.s.prefix ;
+	    AfterObjs   => obj0 ++ obj ++ neg ++ part ++ vp.a2 ++ vp.s.prefix ;
+      BetweenObjs => obj0 ++ neg ++ obj ++ part ++ vp.a2 ++ vp.s.prefix 
 	  } ;
           inf : Str  =                                               
             case <vp.isAux, vp.inf.p2, a> of {                  
               <True,True,Anter> => vp.s.s ! VInf ++ vp.inf.p1 ; --# notpresent
-              _ =>                                              
-                 vp.inf.p1 ++ verb.p2                           
-              }                                                 
-              ;                                                 
+              _                 => verb.p2 ++ vp.inf.p1 } ; -- cunger: changed from vp.inf.p1 ++ verb.p2 
           extra = vp.ext ;
 
-          --for the Sub word order
+          --for the Sub word order 
           inffin : Str =                                           
             case <t,a,vp.isAux> of {                          
-                                 -- gezien  zou/zal hebben  
-              <Cond,Anter,False> => vperf ++ fin ++ auxv ! VInf ; --# notpresent
-	      <Fut,Anter,False>  => vperf ++ fin ++ auxv ! VInf ; --# notpresent
-	                         -- zou/zal zien
-	      <Cond,Simul,False> => fin ++ verb.p2 ;          
-	      <Fut,Simul,False>  => fin ++ verb.p2 ;          
-	                     -- wil    kunnen zien (first line in inf)
-	      <_,Anter,True> => fin ++ inf ; -- double inf    --# notpresent
-              _   =>  fin ++ inf                              
-              -- no inf ++ fin, this is not German :-P
+            -- gezien zou/zal hebben  
+                <Cond,Anter,False> => vperf ++ fin ++ auxv ! VInf ; --# notpresent
+                <Fut,Anter,False>  => vperf ++ fin ++ auxv ! VInf ; --# notpresent
+            -- zou/zal zien
+               <Cond,Simul,False> => fin ++ verb.p2 ;          
+               <Fut,Simul,False>  => fin ++ verb.p2 ;          
+            -- wil kunnen zien (first line in inf)
+               <_,Anter,True> => fin ++ inf ; -- double inf    --# notpresent
+               _   =>  fin ++ inf                              
+            -- no inf ++ fin, this is not German :-P
             }                                                  
         in
         case o of {
@@ -640,15 +644,17 @@ param
 
   infVP : Bool -> VP -> ((Agr => Str) * Str * Str) = \isAux, vp -> 
     <
-     \\agr => vp.n0 ! agr ++  vp.n2 ! agr ++  vp.a2,
+     \\agr => vp.n0 ! agr ++ vp.n2 ! agr ++ vp.a2,
+     let vverb = vp.s 
+     in 
      vp.a1 ! Pos ++ 
-     if_then_Str isAux [] "te" ++ vp.s.s ! VInf,
+     if_then_Str isAux (vverb.s ! VInfFull) (vverb.prefix ++ "te" ++ vverb.s ! VInf),
      vp.inf.p1 ++ vp.ext
     > ;
 
   useInfVP : Bool -> VP -> Str = \isAux,vp ->
     let vpi = infVP isAux vp in
-    vpi.p1 ! agrP3 Sg ++ vpi.p3 ++ vpi.p2 ;
+    "om" ++ vpi.p1 ! agrP3 Sg ++ vpi.p3 ++ vpi.p2 ; -- TODO
 
   reflPron : Agr => Str = table {
     {n = Sg ; p = P1} => "me" ;
@@ -669,7 +675,7 @@ param
       p = conjPerson a.p b.p
       } ;
 
--- The infinitive particle "zu" is used if and only if $vv.isAux = False$.
+-- The infinitive particle "te" is used if and only if $vv.isAux = False$.
  
   infPart : Bool -> Str = \b -> if_then_Str b [] "te" ;
 

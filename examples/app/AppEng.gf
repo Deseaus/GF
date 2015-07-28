@@ -4,11 +4,13 @@ concrete AppEng of App =
 
   TranslateEng - [
   -- Verb
-    SlashV2V,             -- replaced by more efficient inlined versions
+    SlashV2a,ComplSlash, -- replaced by a more efficient inlined version
+    SlashV2V,             
     Slash2V3, Slash3V3, SlashV2S, SlashV2Q, SlashV2A, 
     SlashVV, SlashV2VNP,
     AdvVPSlash, AdVVPSlash, VPSlashPrep,
   -- Sentence
+    SlashVP, SlashVS,
     PredSCVP, 
     AdvSlash, SlashPrep, SlashVS,
     EmbedS, EmbedQS, EmbedVP, RelS,
@@ -16,9 +18,10 @@ concrete AppEng of App =
     ComplSlashIP,AdvQVP,AddAdvQVP,QuestQVP,
   -- Idiom
     CleftNP, CleftAdv,
-    ImpP3    
+    ImpP3,
   -- Construction
   -- Extensions
+    PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
   ,PhrasebookEng - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv]
@@ -42,4 +45,9 @@ lin
   ComplV2S v np vp = mkVP v np vp ;
   ComplV3  v np vp = mkVP v np vp ;
 
+
+ComplV2 v np = mkVP v np ;
+
+  PassV2 v2 = passiveVP v2 ;
+  PassV2 v2 = passiveVP v2 ;
 }

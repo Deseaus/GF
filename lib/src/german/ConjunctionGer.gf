@@ -10,14 +10,13 @@ concrete ConjunctionGer of Conjunction =
     ConjAdv conj ss = conjunctDistrSS conj ss ;
 
     ConjNP conj ss = heavyNP (conjunctDistrTable PCase conj ss ** {
-      a = Ag Fem (conjNumber conj.n (numberAgr ss.a)) (personAgr ss.a)
+      a = Ag Fem (conjNumber conj.n (numberAgr ss.a)) (personAgr ss.a) ;
       }) ;
 
     ConjAP conj ss = conjunctDistrTable AForm conj ss ** {
-      isPre = ss.isPre
-      } ;
+      isPre = ss.isPre ; c = ss.c ; ext = ss.ext} ;
 
-    ConjRS conj ss = conjunctDistrTable GenNum conj ss ** {
+    ConjRS conj ss = conjunctDistrTable RelGenNum conj ss ** {
       c = ss.c
       } ;
 
@@ -35,18 +34,37 @@ concrete ConjunctionGer of Conjunction =
 
     BaseAdv = twoSS ;
     ConsAdv = consrSS comma ;
-    BaseNP x y = twoTable PCase x y ** {a = conjAgr x.a y.a} ;
-    ConsNP xs x = consrTable PCase comma xs x ** {a = conjAgr xs.a x.a} ;
-    BaseAP x y = twoTable AForm x y ** {isPre = andB x.isPre y.isPre} ;
-    ConsAP xs x = consrTable AForm comma xs x ** {isPre = andB xs.isPre x.isPre} ;
-    BaseRS x y = twoTable GenNum x y ** {c = y.c} ;
-    ConsRS xs x = consrTable GenNum comma xs x ** {c = xs.c} ;
+    BaseNP x y = {
+		s1 = \\c => x.s ! c ++ bigNP x ;
+		s2 = \\c => y.s ! c ++ bigNP y ;
+		a = conjAgr x.a y.a } ;
+    ConsNP xs x = {
+		s1 = \\c => xs.s ! c ++ bigNP xs ++ comma ++ x.s1 ! c ;
+		s2 = x.s2 ;
+		a = conjAgr xs.a x.a } ;
+    BaseAP x y = {
+		s1 = bigAP x ;
+		s2 = bigAP y ;
+		isPre = andB x.isPre y.isPre ;
+		c = <[],[]> ;
+	  	ext = []} ;
+   ConsAP xs x = {
+		s1 = \\a => (bigAP xs) ! a ++ comma ++ x.s1 ! a ;
+		s2 = x.s2 ;
+		isPre = andB x.isPre xs.isPre ;
+		c = <[],[]> ;
+	  	ext = []} ;
+    BaseRS x y = twoTable RelGenNum x y ** {c = y.c} ;
+    ConsRS xs x = consrTable RelGenNum comma xs x ** {c = xs.c} ;
 
   lincat
     [S] = {s1,s2 : Order => Str} ;
     [Adv] = {s1,s2 : Str} ;
     [NP] = {s1,s2 : PCase => Str ; a : Agr} ;
-    [AP] = {s1,s2 : AForm => Str ; isPre : Bool} ;
-    [RS] = {s1,s2 : GenNum => Str ; c : Case} ;
+    [AP] = {s1,s2 : AForm => Str ; isPre : Bool; c : Str * Str ; ext : Str} ;
+    [RS] = {s1,s2 : RelGenNum => Str ; c : Case} ;
 
+  oper
+    bigAP : AP -> AForm => Str = \ap ->
+		\\a => ap.c.p1 ++ ap.s ! a ++ ap.c.p2 ++ ap.ext;
 }

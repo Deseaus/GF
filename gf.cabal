@@ -1,5 +1,5 @@
 name: gf
-version: 3.6.10-darcs
+version: 3.7-darcs
 
 cabal-version: >= 1.10
 build-type: Custom
@@ -253,7 +253,7 @@ Library
     GF.System.Directory
     GF.System.Process
     GF.System.Signal
-    GF.System.UseSignal
+--  GF.System.UseSignal
     GF.Text.Clitics
     GF.Text.Coding
     GF.Text.Lexing

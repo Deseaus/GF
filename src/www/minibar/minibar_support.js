@@ -5,6 +5,20 @@ function langpart(conc,abs) { // langpart("FoodsEng","Foods") == "Eng"
     return hasPrefix(conc,abs) ? conc.substr(abs.length) : conc;
 }
 
+
+// Lookup language codes (from "flags language = ..." in the source grammar)
+function langCode(grammar,conc) {
+    if(!grammar.langCode) {
+	var ls=grammar.languages
+	var langCode={}
+	for(var i=0;i<ls.length;i++)
+	    if(ls[i].languageCode)
+		langCode[ls[i].name]=ls[i].languageCode
+	grammar.langCode=langCode
+    }
+    return grammar.langCode[conc]
+}
+
 // Words are separated by spaces (for now). GF has other lexers/unlexers.
 function gf_lex(s) { return s.split(" "); }
 function gf_unlex(ws) { return ws.join(" "); }
@@ -47,3 +61,35 @@ function open_popup(url,target) {
 }
 
 function opener_element(id) { with(window.opener) return element(id); }
+
+function supportsSVG() {
+    return document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1")
+}
+
+function speech_buttons(to3,to2,txt) {
+    var voices = window.speechSynthesis && window.speechSynthesis.getVoices() || []
+    var dvs = voices.filter(function(v){return v.default})
+    if(to2)
+	var pick=function (v) { return v.lang==to2 }
+    else {
+	var to2dash=alangcode(to3)+"-"
+	var pick=function(v) { return hasPrefix(v.lang,to2dash) }
+    }
+    function btn(v) {
+	var u=new SpeechSynthesisUtterance(txt)
+	u.lang=v.lang // how to use v.voiceURI or v.name?
+
+	function speak() {
+	    speechSynthesis.cancel()
+	    speechSynthesis.speak(u)
+	}
+	return button(v.lang,speak)
+    }
+    //console.log(voices.length,"voices")
+    var vs=dvs.filter(pick)
+    if(vs.length==0) vs=voices.filter(pick)
+    //console.log(vs.length,"voices for "+to3+" "+to2)
+    var btns=vs.map(btn)
+    //console.log(btns.length,"voice buttons")
+    return wrap("span",btns)
+}

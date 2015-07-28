@@ -1,9 +1,9 @@
 -- update the import list of every language
 -- although possibly some extra definitions at the end
--- the new files are produced in ./tmp/
+-- the new files are produced in ./tmp/ which has to be created first
 -- usage: runghc MkApp.hs
 
-langs = words "Bul Cat Chi Dut Eng Fin Fre Ger Hin Ita Spa Swe"
+langs = words "Bul Cat Chi Dut Eng Fin Fre Ger Hin Ita Jpn Spa Swe Tha"
 appCnc lang = "App" ++ lang ++ ".gf"
 
 appAbs = "App.gf"
@@ -22,14 +22,6 @@ putImports i s =
 
 extra s = unlines (init (lines s) ++ extraLines ++ ["}"])
 
-extraLines = -- [] -- default: no extra
-
-  [
-  "",
-  "ComplV2V v np vp = mkVP v np vp ;",
-  "ComplV2A v np vp = mkVP v np vp ;",
-  "ComplV2Q v np vp = mkVP v np vp ;",
-  "ComplV2S v np vp = mkVP v np vp ;",
-  "ComplV3  v np vp = mkVP v np vp ;",
-  ""
-  ]
+extraLines = [
+  "  PassV2 v2 = passiveVP v2 ;"
+  ] -- default: no extra

@@ -49,8 +49,9 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
     QuestIComp icomp np = {
       s = \\m,t,a,p => 
             let 
-              vp  = predV sein_V ;
-              cls = (mkClause (np.s ! NPC Nom) np.a vp).s ! m ! t ! a ! p ;
+              vp  = predV sein_V ** {ext = icomp.ext};
+	      subj = mkSubj np vp.subjc ;
+              cls = (mkClause subj.p1 subj.p2 vp).s ! m ! t ! a ! p ;
               why = icomp.s ! np.a
             in table {
               QDir   => why ++ cls ! Inv ;
@@ -95,9 +96,9 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
 
     AdvIAdv i a = {s = i.s ++ a.s} ;
  
-    CompIAdv a = {s = \\_ => a.s} ;
+    CompIAdv a = {s = \\_ => a.s ; ext = ""} ;
 
-    CompIP ip = {s = \\_ => ip.s ! Nom} ;
+    CompIP ip = {s = \\_ => ip.s ! Nom ; ext = "" } ;
 
 }
 

@@ -111,13 +111,13 @@ lin pot1 d =
 lin pot1plus d e =
   {s = \\g => table {
   p@(indep | postpo) => (d.s ! (NCard Masc) ! tenplus) ++ (table {{p1 = Sg
-  ; p2 = Sg} => "et" ; {p1 = Sg ; p2 = pl} => "-" ; {p1 = Pl ; p2 =
-  Sg} => "-" ; {p1 = Pl ; p2 = pl} => "-"} ! {p1 = d.n ; p2 =
+  ; p2 = Sg} => "et" ; {p1 = Sg ; p2 = pl} => hyphen ; {p1 = Pl ; p2 =
+  Sg} => hyphen ; {p1 = Pl ; p2 = pl} => hyphen} ! {p1 = d.n ; p2 =
   e.inh}) ++ e.s ! g ! {p1 = d.inh ; p2 = p} ; 
   attr => (d.s ! (NCard Masc) !
   tenplus) ++ (table {{p1 = Sg ; p2 = Sg} => "et" ; {p1 = Sg ; p2 =
-  pl} => "-" ; {p1 = Pl ; p2 = Sg} => "-" ; {p1 = Pl ; p2 = pl} =>
-  "-"} ! {p1 = d.n ; p2 = e.inh}) ++ e.s ! g ! {p1 = d.inh ; p2 =
+  pl} => hyphen ; {p1 = Pl ; p2 = Sg} => hyphen ; {p1 = Pl ; p2 = pl} =>
+  hyphen} ! {p1 = d.n ; p2 = e.inh}) ++ e.s ! g ! {p1 = d.inh ; p2 =
   indep}} ; n = Pl} ;
 lin pot1as2 n = n ;
 lin pot2 d =
@@ -139,6 +139,8 @@ lin pot3plus n m =
   {s = \\g => (n.s ! NCard Masc !  attr) ++  "mille" ++ m.s ! g ! postpo ; n =
   Pl} ;
 
+oper hyphen = BIND ++ "-" ++ BIND ;
+
 
 -- numerals as sequences of digits
 
@@ -149,7 +151,7 @@ lin pot3plus n m =
     IDig d = d ;
 
     IIDig d i = {
-      s = \\o => d.s ! NCard Masc ++ i.s ! o ;
+      s = \\o => d.s ! NCard Masc ++ BIND ++ i.s ! o ;
       n = Pl
     } ;
 

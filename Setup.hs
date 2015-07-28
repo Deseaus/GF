@@ -5,7 +5,8 @@ import Distribution.Simple.Utils
 import Distribution.Simple.Setup
 import Distribution.PackageDescription hiding (Flag)
 import Control.Monad
-import Data.List(isPrefixOf,intersect)
+import Data.Char(isSpace)
+import Data.List(isPrefixOf,intersect,unfoldr,stripPrefix)
 import Data.Maybe(listToMaybe)
 --import System.IO
 import qualified Control.Exception as E
@@ -81,7 +82,7 @@ rglCommands =
        let prelude_src_dir = rgl_src_dir    </> "prelude"
            prelude_dst_dir = rgl_dst_dir (lbi bi) </> "prelude"
        createDirectoryIfMissing True prelude_dst_dir
-       files <- ls prelude_src_dir
+       files <- list_files prelude_src_dir
        run_gfc bi (["-s", "--gfo-dir="++prelude_dst_dir] ++ [prelude_src_dir </> file | file <- files])
 
   , RGLCommand "all"     True  $ gfcp [l,s,c,t,sc]
@@ -163,7 +164,7 @@ copyRGL args flags bi = do
 copyAll s from to = do
   putStrLn $ "Installing [" ++ s ++ "] " ++ to
   createDirectoryIfMissing True to
-  mapM_ (\file -> copyFile (from </> file) (to </> file)) =<< ls from
+  mapM_ (\file -> copyFile (from </> file) (to </> file)) =<< list_files from
 {-
 sdistRGL pkg mb_lbi hooks flags = do
   paths <- getRGLFiles rgl_src_dir []
@@ -397,8 +398,8 @@ extractDarcsVersion distFlag =
          let from = case tags of
                       [] -> []
                       tag:_ -> ["--from-tag="++tag]
-         changes <- lines `fmap` readProcess "darcs" ("changes":from) ""
-         let dates = init' (filter ((`notElem` [""," "]).take 1) changes)
+         dates <- patches `fmap` readProcess "darcs" ("changes":from) ""
+--       let dates = init' (filter ((`notElem` [""," "]).take 1) changes)
          whatsnew <- tryIOE $ lines `fmap` readProcess "darcs" ["whatsnew","-s"] ""
          return (listToMaybe tags,listToMaybe dates,
                  length dates,either (const 0) length whatsnew)
@@ -413,7 +414,7 @@ updateFile path new =
                                  writeFile path new
 
 -- | List files, excluding "." and ".."
-ls path = filter (`notElem` [".",".."]) `fmap` getDirectoryContents path
+list_files path = filter ((/=".").take 1) `fmap` getDirectoryContents path
 
 
 -- | For parallel RGL module compilation
@@ -423,3 +424,14 @@ parallel_ ms = sequence_ ms {-
      ts <- sequence [ forkIO (m >> writeChan c ()) | m <- ms]
      sequence_ [readChan c | _ <- ts]
 --}
+
+patches = paras . lines
+  where
+    paras = unfoldr para
+    para ls = case break null $ dropWhile null ls of
+                ([],[]) -> Nothing
+                (xs,ys) -> Just (info xs,ys)
+
+    info = unwords . map dropHeaders . filter (\l->not $ any (`isPrefixOf` l) [" ","patch "])
+    dropHeaders = dropWhile isSpace . dropPrefix "Author: " . dropPrefix "Date: "
+    dropPrefix pre l = maybe l id (stripPrefix pre l)

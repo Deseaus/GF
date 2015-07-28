@@ -12,6 +12,7 @@ typedef struct {
 	GuExn* err;
 	GuPool* opool;
 	GuPool* tmp_pool;
+	GuBuf* non_lexical_buf;
 	struct PgfJitState* jit_state;
 } PgfReader;
 
@@ -47,7 +48,7 @@ pgf_reader_done(PgfReader* rdr, PgfPGF* pgf);
 
 
 // JIT specific interface
-#ifdef PGF_EVALUATOR_H_
+#ifdef PGF_REASONER_H_
 
 typedef struct PgfJitState PgfJitState;
 

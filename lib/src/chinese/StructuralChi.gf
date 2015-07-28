@@ -23,8 +23,8 @@ lin
 --    in_Prep = mkPrep "里" [];  --- in Paris
     in_Prep = mkPrep "在" "中"  ;  --- in the house, the car, etc
     possess_Prep = mkPrep [] "的" ATPoss ;
-    with_Prep = mkPrep "和" "一起" ;
-----    with_Prep = mkPrep [] "和"; -- an alternative for some uses
+    with_Prep = mkPrep "和" "一起" (ATPlace True) ; -- "with you"
+----    with_Prep = mkPrep "和" [] ; -- "with bread"
  
 and_Conj = {s = table {
                     CPhr CNPhrase => mkConjForm "和" ;
@@ -85,7 +85,7 @@ can8know_VV = mkV "会" [] [] [] [] "不" ; ----
 
 except_Prep = mkPrep "以外" "除了" mannerAdvType ;
 for_Prep = mkPrep "为了" ;
-from_Prep = mkPrep "从" ;
+from_Prep = mkPrep "从" "" (ATPlace True) ;
 in8front_Prep = mkPrep zai_s "前边"  ;
 it_Pron = pronNP "它" ;
 much_Det = mkDet "多" Sg ;

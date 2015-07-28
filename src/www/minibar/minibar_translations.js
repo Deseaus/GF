@@ -12,11 +12,13 @@ function Translations(server,opts) {
 	abstract_action: null, // action when selecting the abstracy syntax tree
 	show_trees: false, // add buttons to show abstract syntax trees,
 	                   // parse trees & word alignment
-	tree_img_format: "png", // format for trees & alignment images,
-	                        // can be "gif", "png" or "svg"
+	tree_img_format: supportsSVG() ? "svg" : "png",
+	                 // format for trees & alignment images,
+	                 // can be "gif", "png" or "svg"
 	show_grouped_translations: true,
 	to_multiple: true, // allow selection of multiple target languages
 	show_brackets: false, // show bracketed string
+	speech: true, // enable speech synthesis buttons
 	translate_limit: 25 // maximum number of parse trees to retrieve
     }
 
@@ -27,9 +29,18 @@ function Translations(server,opts) {
     this.menus=empty("span");
 
     var tom_opts={id:"to_menu"}
-    if(this.options.to_multiple) tom_opts.multiple=true,tom_opts.size=5;
+    if(this.options.to_multiple)
+	tom_opts.multiple=true,tom_opts.size=8,
+        tom_opts.style="position: absolute";
     var tom=this.to_menu=node("select",tom_opts,[]);
-    appendChildren(this.menus,[text(" To: "), this.to_menu])
+    if(this.options.to_multiple) {
+	tom.style.display="none"
+	function toggle_tom() {
+	    tom.style.display= tom.style.display=="none" ? "" : "none"
+	}
+	appendChildren(this.menus,[button("To:",toggle_tom),tom,text(" ... ")])
+    }
+    else appendChildren(this.menus,[text(" To: "),tom])
     tom.onchange=bind(this.change_language,this);
     var o=this.options
     if(o.initial_grammar && o.initial_toLangs)
@@ -106,43 +117,69 @@ Translations.prototype.target_lang=function() {
 
 Translations.prototype.show_translations=function(translationResults) {
     var self=this;
-    function tdt(tree_btn,txt,action) {
-	if(action) {
-	    txt=wrap("span",txt)
-	    txt.onclick=action
-	}
-	return self.options.show_trees ? td([tree_btn,text(" "),txt]) : td(txt)
+    function abs_tdt(tree) {
+	var as = self.options.show_trees
+	    ? [self.abstree_button(tree),
+	       self.alignment_button(tree,to=="All",self.toLangs),
+	       text(" ")]
+	    : []
+	as.push(text(tree))
+	return td(as)
+    }
+    function text_speech(langcode,to,txt,lin) {
+	var langcode2=langCode(self.grammar,to)
+	return wrap("span",[txt,speech_buttons(langcode,langcode2,lin)])
+    }
+    function lin_tdt(tree,to,langcode,lin) {
+	var txt=wrap("span",text("▸ "+lin))
+	var ts = text_speech(langcode,to,txt,lin)
+	var as = wrap("span",
+		    self.options.show_trees
+		    ? [self.parsetree_button(tree,to),text(" "),ts]
+		    : [ts])
+	as.active=txt
+	as.swap=ts
+	return as
     }
     function act(lin) {
 	return self.lin_action ? function() { self.lin_action(lin) } : null
     }
-    function show_lin(tree_btn,lin,tree) {
-	function draw_table(lintable) {
+    function atext(s,act) {
+	var txt=wrap("span",text(s))
+	txt.onclick=act
+	return txt
+    }
+    function show_lin(langcode,lin,tree) {
+	function draw_table(lintable,action) {
 	    function draw_texts(texts) {
-		return texts.map(function(s) { return wrap("div",text(s)) })
+		function text1(s) {
+		    var txt=atext(s,action)
+		    return wrap("div",text_speech(langcode,lin.to,txt,s))
+		}
+		return texts.map(text1)
 	    }
 	    function draw_row(row) {
-		return tr([td(text(row.params)),td(draw_texts(row.texts))])
+		return tr([td(atext(row.params,action)),td(draw_texts(row.texts))])
 	    } // ▼ ▾
 	    return wrap("span",
-			[text("▾ "),
+			[atext("▾ ",action),
 			 wrap_class("table","lintable",lintable.map(draw_row))])
 	}
 	function get_tabular() {
-	    var t=this
-	    var pa=this.parentNode
 	    function show_table(lins) {
 		if(lins.length==1) {
-		    var ta=draw_table(lins[0].table)
-		    replaceNode(ta,t)
-		    ta.onclick=function() { replaceNode(t,ta) }
-		    t.onclick=function() { replaceNode(ta,t) }
+		    function restore() { replaceNode(one.swap,all) }
+		    var all=draw_table(lins[0].table,restore)
+		    replaceNode(all,one.swap)
+		    one.active.onclick=function() { replaceNode(all,one.swap) }
 		}
 	    }
 	    self.server.pgf_call("linearizeTable",{"tree":tree,"to":lin.to},
 				 show_table)
 	}
-	return tdt(tree_btn,text("▸ "+lin.text),get_tabular) // ▶
+	var one= lin_tdt(tree,lin.to,langcode,lin.text) // ▶
+	one.active.onclick=get_tabular
+	return td(one)
     }
     with(self) {
 	var trans=main;
@@ -175,12 +212,7 @@ Translations.prototype.show_translations=function(translationResults) {
 		                      ? title("Edit the syntax tree",
 				              button("Abstract",abs_act))
 			              : text("Abstract: ")
-			tbody.appendChild(
-			    tr([th(abs_hdr),
-				tdt(node("span",{},
-					 [abstree_button(t.tree),
-					  alignment_button(t.tree,to=="All",toLangs)]),
-				    text(t.tree))]));
+			tbody.appendChild(tr([th(abs_hdr),abs_tdt(t.tree)]));
 		    }
 		    for(var i=0;i<lin.length;i++) {
 			if(lin[i].to==to && toLangs.length==1)
@@ -195,7 +227,7 @@ Translations.prototype.show_translations=function(translationResults) {
 			    //hdr.disabled=lin[i].to==current.from
 			    var btn=parsetree_button(t.tree,lin[i].to)
 			    tbody.appendChild(
-				tr([th(hdr),show_lin(btn,lin[i],t.tree)]));
+				tr([th(hdr),show_lin(langcode,lin[i],t.tree)]));
 			}
 		    }
 		    trans.appendChild(wrap("table",tbody));

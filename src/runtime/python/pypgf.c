@@ -1202,7 +1202,7 @@ typedef struct {
 } PyPgfLiteralCallback;
 
 static PgfExprProb*
-pypgf_literal_callback_match(PgfLiteralCallback* self,
+pypgf_literal_callback_match(PgfLiteralCallback* self, PgfConcr* concr,
                              size_t lin_idx,
                              GuString sentence, size_t* poffset,
                              GuPool *out_pool)
@@ -1264,7 +1264,7 @@ pypgf_literal_callback_match(PgfLiteralCallback* self,
 }
 
 static GuEnum*
-pypgf_literal_callback_predict(PgfLiteralCallback* self,
+pypgf_literal_callback_predict(PgfLiteralCallback* self, PgfConcr* concr,
 	                           size_t lin_idx,
 	                           GuString prefix,
 	                           GuPool *out_pool)
@@ -2484,23 +2484,25 @@ PGF_generateAll(PGFObject* self, PyObject *args, PyObject *keywds)
 	pyres->source = (PyObject*) self;
 	Py_INCREF(self);
 
+	GuPool* out_pool = gu_new_pool();
+
+	PyObject* py_pool = PyPool_New(out_pool);
+	pyres->container = PyTuple_Pack(2, pyres->source, py_pool);
+	Py_DECREF(py_pool);
+
 	pyres->pool = gu_new_pool();
 	pyres->max_count = max_count;
 	pyres->counter   = 0;
 	pyres->fetch     = Iter_fetch_expr;
-	pyres->container = (PyObject*) pyres;
 
-	GuPool *tmp_pool = gu_local_pool();
+	GuExn* err = gu_exn(pyres->pool);
 
 	pyres->res =
-		pgf_generate_all(self->pgf, catname, pyres->pool);
+		pgf_generate_all(self->pgf, catname, err, pyres->pool, out_pool);
 	if (pyres->res == NULL) {
 		Py_DECREF(pyres);
-		gu_pool_free(tmp_pool);
 		return NULL;
 	}
-
-	gu_pool_free(tmp_pool);
 
 	return pyres;
 }

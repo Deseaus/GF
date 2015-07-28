@@ -6,7 +6,7 @@ concrete LexiconDut of Lexicon = CatDut **
   open Prelude, ParadigmsDut, IrregDut in {
 
 flags 
-    coding=utf8 ;
+  coding=utf8 ;
   optimize=all_subs ;
 
 lin
@@ -14,7 +14,7 @@ lin
   already_Adv = mkAdv "al" ;
   answer_V2S = mkV2S (mkV "antwoorden") noPrep ;
   ask_V2Q = mkV2Q vragen_V noPrep ;
-  bad_A = mkA "boos" ;
+  bad_A = mkA "slecht" ;
   beautiful_A = mkA "mooi" ;
   become_VA = mkVA worden_V ;
   beer_N = mkN "bier" "bieren" neuter ;
@@ -45,7 +45,7 @@ lin
   married_A2 = mkA2 (mkA "getrouwd") (mkPrep "met") ;
   mother_N2 = mkN2 (mkN "moeder") ;
   now_Adv = mkAdv "nu" ;
-  paint_V2A = mkV2A (mkV "schilderen" "schildert") noPrep ;
+  paint_V2A = mkV2A (mkV "schilderen" "schildert") ;
   paris_PN = mkPN "Parijs" ;
   red_A = mkA "rood" ;
   say_VS = mkVS zeggen_V ;
@@ -246,7 +246,7 @@ queen_N = mkN "koningin" utrum ;
 question_N = mkN "vraag" utrum ;
 radio_N = mkN "radio" utrum ;
 rain_N = mkN "regen" utrum ;
-rain_V0 = mkV "regenen" ;
+rain_V0 = mkV "regen" "regent" "regenen" "regende" "regenden" "geregend" ; 
 read_V2 = mkV2 lezen_V ;
 ready_A = mkA "klaar" ;
 reason_N = mkN "reden" utrum ;
@@ -337,7 +337,7 @@ understand_V2 = mkV2 (mkV "begrijpen" "begreep" "begrepen" "begrepen") ;
 university_N = mkN "universiteit" utrum ;
 village_N = mkN "dorp" neuter ;
 vomit_V = mkV "braken" ;
-wait_V2 = mkV2 "wachen" ;
+wait_V2 = mkV2 (mkV "wachten") (mkPrep "op") ;
 walk_V = mkV "lopen" ;
 war_N = mkN "oorlog" utrum ;
 wash_V2 = mkV2 wassen_V ;

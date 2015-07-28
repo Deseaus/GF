@@ -26,6 +26,8 @@ module PGF2 (-- * CId
              graphvizAbstractTree,graphvizParseTree,
              -- * Morphology
              MorphoAnalysis, lookupMorpho, fullFormLexicon,
+             -- * Generation
+             functions, generateAll,
              -- * Exceptions
              PGFError(..),
              -- * Grammar specific callbacks
@@ -110,8 +112,9 @@ generateAll p cat =
   unsafePerformIO $
     do genPl  <- gu_new_pool
        exprPl <- gu_new_pool
-       enum   <- withCString cat $ \cat ->
-                   pgf_generate_all (pgf p) cat genPl
+       enum   <- withCString cat $ \cat -> do
+                   exn <- gu_new_exn genPl
+                   pgf_generate_all (pgf p) cat exn genPl exprPl
        genFPl  <- newForeignPtr gu_pool_finalizer genPl
        exprFPl <- newForeignPtr gu_pool_finalizer exprPl
        fromPgfExprEnum enum genFPl (p,exprFPl)
@@ -524,6 +527,26 @@ alignWords lang e = unsafePerformIO $
       (fids :: [CInt]) <- peekArray (fromIntegral (n_fids :: CInt)) (ptr `plusPtr` (#offset PgfAlignmentPhrase, fids))
       return (phrase, map fromIntegral fids)
 
+functions :: PGF -> [Fun]
+functions p =
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+    allocaBytes (#size GuMapItor) $ \itor -> do
+      exn <- gu_new_exn tmpPl
+      ref <- newIORef []
+      fptr <- wrapMapItorCallback (getFunctions ref)
+      (#poke GuMapItor, fn) itor fptr
+      pgf_iter_functions (pgf p) itor exn
+      freeHaskellFunPtr fptr
+      fs <- readIORef ref
+      return (reverse fs)
+  where
+    getFunctions :: IORef [String] -> MapItorCallback
+    getFunctions ref itor key value exn = do
+      names <- readIORef ref
+      name  <- peekCString (castPtr key)
+      writeIORef ref $! (name : names)
+
 -----------------------------------------------------------------------------
 -- Helper functions
 
@@ -577,11 +600,9 @@ nerc pgf (lang,concr) lin_idx sentence offset =
               "PN" -> retLit (mkApp lemma [])
               "WeekDay" -> retLit (mkApp "weekdayPN" [mkApp lemma []])
               "Month" -> retLit (mkApp "monthPN" [mkApp lemma []])
-              "Language" -> Nothing
-              _ -> pn
+              _ -> Nothing
       where
-        retLit e = --traceShow (name,e,drop end_offset sentence) $
-                   Just (e,0,end_offset)
+        retLit e = Just (e,0,end_offset)
           where end_offset = offset+length name
         pn = retLit (mkApp "SymbPN" [mkApp "MkSymb" [mkStr name]])
         ((lemma,cat),_) = maximumBy (compare `on` snd) (reverse ls)

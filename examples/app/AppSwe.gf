@@ -3,11 +3,13 @@
 concrete AppSwe of App = 
   TranslateSwe - [
   -- Verb
-    SlashV2V,             -- replaced by more efficient inlined versions
+    SlashV2a,ComplSlash, -- replaced by a more efficient inlined version
+    SlashV2V,             
     Slash2V3, Slash3V3, SlashV2S, SlashV2Q, SlashV2A, 
     SlashVV, SlashV2VNP,
     AdvVPSlash, AdVVPSlash, VPSlashPrep,
   -- Sentence
+    SlashVP, SlashVS,
     PredSCVP, 
     AdvSlash, SlashPrep, SlashVS,
     EmbedS, EmbedQS, EmbedVP, RelS,
@@ -15,9 +17,10 @@ concrete AppSwe of App =
     ComplSlashIP,AdvQVP,AddAdvQVP,QuestQVP,
   -- Idiom
     CleftNP, CleftAdv,
-    ImpP3    
+    ImpP3,
   -- Construction
   -- Extensions
+    PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
   ,PhrasebookSwe - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A]
@@ -41,5 +44,10 @@ ComplV2A v np vp = mkVP v np vp ;
 ComplV2Q v np vp = mkVP v np vp ;
 ComplV2S v np vp = mkVP v np vp ;
 ComplV3  v np vp = mkVP v np vp ;
+
+
+ComplV2 v np = mkVP v np ;
+
+  PassV2 v2 = SyntaxSwe.passiveVP v2 ;
 
 }
